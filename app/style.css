@@ -1,0 +1,119 @@
+@font-face {
+    font-family: Montserrat;
+    src: url(Montserrat-VariableFont_wght.ttf);
+}
+
+:root {
+    --unit: calc(min(1vw, 0.6vh));
+}
+
+html {
+    user-select: none;
+    width: calc(100 * var(--unit));
+    height: 100%;
+    margin: 0 auto;
+}
+
+body {
+    height: 100%;
+    margin: 0;
+    font-family: Montserrat, Arial, sans-serif;
+}
+
+#header {
+    width: calc(95 * var(--unit));
+    padding: calc(1 * var(--unit));
+    margin-left: auto;
+    margin-right: auto;
+    border-bottom: 1px solid lightgray;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+#app-name {
+    font-size: calc(9 * var(--unit));
+    color: #222;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#setup {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    margin: calc(6 * var(--unit)) calc(3 * var(--unit));
+}
+#word-choice {
+    font-size: calc(4 * var(--unit));
+}
+#chosen-word {
+    width: calc(50 * var(--unit));
+    border-top: none;
+    border-left: none;
+    border-right: none;
+    border-bottom: 1px solid gray;
+    outline: none;
+    font-size: calc(7.5 * var(--unit));
+    font-family: 'Courier New', Courier, monospace;
+    font-weight: bold;
+    /* text-align: center; */
+}
+#start-game {
+    width: calc(10 * var(--unit));
+    height: calc(10 * var(--unit));
+    cursor: pointer;
+    transition: 500ms;
+    background-color: dodgerblue;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+#triangle-sign {
+    width: 0;
+    height: 0;
+    margin-left: calc(1.0 * var(--unit));
+    border-top: calc(2.6 * var(--unit)) solid transparent;
+    border-bottom: calc(2.6 * var(--unit)) solid transparent;
+    border-left: calc(4.5 * var(--unit)) solid white;
+}
+#start-game[disabled=true] {
+    background-color: lightgray;
+}
+
+#guesses {
+    margin: calc(4 * var(--unit));
+}
+
+.guess {
+    margin-top: calc(3 * var(--unit));
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+.guessed-word {
+    width: calc(30 * var(--unit));
+    font-size: calc(4 * var(--unit));
+}
+.send-result {
+    width: calc(12 * var(--unit));
+    font-size: calc(4 * var(--unit));
+    cursor: pointer;
+    text-align: right;
+}
+
+.loading {
+    width: calc(5 * var(--unit));
+    height: calc(5 * var(--unit));
+    margin-right: calc(3 * var(--unit));
+    animation: rotate linear 700ms infinite;
+}
+@keyframes rotate {
+    from {transform: rotate(0deg);}
+    from {transform: rotate(120deg);}
+}
+.loading-text {
+    margin-right: auto;
+}
