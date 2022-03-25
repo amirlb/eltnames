@@ -17,8 +17,6 @@ def make_guess(previous_results):
 
 
 if os.getenv('REQUEST_METHOD').lower() == 'options':
-    # print('Access-Control-Allow-Origin: ' + repr(os.getenv('ORIGIN')))
-    # print('Vary: Origin')
     print('Access-Control-Allow-Origin: *')
     print('Access-Control-Allow-Headers: *')
     print('Access-Control-Allow-Methods: POST, OPTIONS')

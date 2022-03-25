@@ -43,22 +43,29 @@ async function ask_computer_to_make_a_guess() {
             body: JSON.stringify(previous_guesses)
         });
         const result = await response.json();
-        new_guess.innerHTML = `
-            <div class="guessed-word">${result.guess}</div>
-            <input type="range" min="0" max="10" value="0">
-            <div class="send-result"></div>
-        `;
-        new_guess.querySelector('input').addEventListener('input', function(event) {
-            new_guess.querySelector('.send-result').innerText = event.target.value + ' 📨';
-        });
-        new_guess.querySelector('.send-result').addEventListener('click', function(event) {
-            const score = parseInt(event.target.innerText.split(' ')[0]);
-            if (!Number.isNaN(score)) {
-                new_guess.querySelector('input').disabled = true;
-                previous_guesses.push({guess: result.guess, score});
-                ask_computer_to_make_a_guess();
-            }
-        });
+        if (result.guess === document.getElementById('chosen-word').value) {
+            new_guess.innerHTML = `
+                <div class="guessed-word">${result.guess}</div>
+                <div>Computer won after ${previous_guesses.length + 1} guesses</div>
+            `;
+        } else {
+            new_guess.innerHTML = `
+                <div class="guessed-word">${result.guess}</div>
+                <input type="range" min="0" max="10" value="0">
+                <div class="send-result"></div>
+            `;
+            new_guess.querySelector('input').addEventListener('input', function(event) {
+                new_guess.querySelector('.send-result').innerText = event.target.value + ' 📨';
+            });
+            new_guess.querySelector('.send-result').addEventListener('click', function(event) {
+                const score = parseInt(event.target.innerText.split(' ')[0]);
+                if (!Number.isNaN(score)) {
+                    new_guess.querySelector('input').disabled = true;
+                    previous_guesses.push({guess: result.guess, score});
+                    ask_computer_to_make_a_guess();
+                }
+            });
+        }
     } catch {
         new_guess.innerText = 'ERROR';
         new_guess.addEventListener('click', function() {
