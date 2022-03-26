@@ -71,19 +71,19 @@ function set_guess_div_to_error(guess_div) {
 
 function set_guess_div(guess_div, guess) {
     guess_div.innerHTML = `
-        <div class="guessed-word">
-            <span>${guess}</span>
+        <div class="single-line">
+            <span class="guessed-word">${guess}</span>
             <a class="dictionary-link"
                target="_blank"
                href="https://www.merriam-webster.com/dictionary/${guess}"
             >(go to dictionary)</a>
         </div>
-        <div class="single-line"></div>
+        <div class="single-line score-buttons"></div>
     `;
     guess_div.classList.remove('single-line');
     guess_div.setAttribute('guess', guess);
 
-    const buttons_div = guess_div.querySelector('.single-line');
+    const buttons_div = guess_div.querySelector('.score-buttons');
     for (let i = 0; i <= 10; i++) {
         const button = document.createElement('div');
         button.classList.add('score-button');

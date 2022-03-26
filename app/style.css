@@ -105,11 +105,8 @@ body {
     height: calc(15 * var(--unit));
 }
 .guessed-word {
-    display: flex;
-    flex-direction: row;
-}
-.guessed-word > span {
-    margin: 0 auto;
+    margin: 0 calc(3 * var(--unit));
+    font-size: calc(5 * var(--unit));
 }
 .dictionary-link {
     text-decoration: none;
@@ -163,7 +160,7 @@ body {
 .loading {
     width: calc(5 * var(--unit));
     height: calc(5 * var(--unit));
-    margin-left: calc(5 * var(--unit));
+    margin-left: calc(3 * var(--unit));
     margin-right: calc(3 * var(--unit));
     animation: rotate linear 700ms infinite;
 }
