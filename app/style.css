@@ -8,7 +8,6 @@
 }
 
 html {
-    user-select: none;
     width: calc(100 * var(--unit));
     height: 100%;
     margin: 0 auto;
@@ -96,6 +95,7 @@ body {
     width: calc(2 * var(--unit));
     font-size: calc(3.5 * var(--unit));
     text-align: center;
+    user-select: none;
     transition: 500ms;
 }
 .guess.active > .score-button {
