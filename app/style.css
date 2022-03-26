@@ -90,6 +90,8 @@ body {
 }
 .score-button {
     padding: calc(1 * var(--unit)) calc(1.4 * var(--unit));
+    width: calc(2.5 * var(--unit));
+    text-align: center;
     transition: 500ms;
 }
 .guess.active > .score-button {
