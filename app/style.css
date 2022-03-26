@@ -93,7 +93,8 @@ body {
 }
 .score-button {
     padding: calc(1 * var(--unit)) calc(1.4 * var(--unit));
-    width: calc(2.5 * var(--unit));
+    width: calc(2 * var(--unit));
+    font-size: calc(3.5 * var(--unit));
     text-align: center;
     transition: 500ms;
 }
@@ -102,7 +103,7 @@ body {
 }
 .score-button[score="0"] {margin-left: auto;}
 .score-button[score="correct"] {
-    margin-left: calc(4 * var(--unit));
+    margin-left: calc(3 * var(--unit));
     padding: calc(2 * var(--unit));
     width: calc(4 * var(--unit));
     height: calc(4 * var(--unit));
