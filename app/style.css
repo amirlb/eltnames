@@ -31,37 +31,31 @@ body {
 
 #explanation {
     margin-top: calc(3 * var(--unit));
+    padding: 0 calc(2 * var(--unit));
 }
 
-#setup {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-    margin: calc(4 * var(--unit)) calc(3 * var(--unit));
-}
-#word-choice {
-    font-size: calc(4 * var(--unit));
-}
-#chosen-word {
-    width: calc(50 * var(--unit));
-    border-top: none;
-    border-left: none;
-    border-right: none;
-    border-bottom: 1px solid gray;
-    outline: none;
-    font-size: calc(7.5 * var(--unit));
-    font-family: 'Courier New', Courier, monospace;
-    font-weight: bold;
-    /* text-align: center; */
-}
 #start-game {
-    width: calc(10 * var(--unit));
-    height: calc(10 * var(--unit));
+    width: calc(50 * var(--unit));
+    height: calc(12 * var(--unit));
+    border-radius: calc(6 * var(--unit));
     cursor: pointer;
+    background-color: #2090ff;
     transition: 500ms;
-    background-color: dodgerblue;
-    border-radius: 50%;
+    margin: calc(8 * var(--unit)) auto;
+    padding-left: calc(10 * var(--unit));
+    font-size: calc(5 * var(--unit));
+    font-weight: 500;
+    color: white;
+    display: flex;
+    align-items: center;
+}
+#play {
+    margin-left: auto;
+    width: calc(12 * var(--unit));
+    height: calc(12 * var(--unit));
+    border-radius: calc(6 * var(--unit));
+    background-color: #1070ff;
+    transition: 500ms;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -74,31 +68,45 @@ body {
     border-bottom: calc(2.6 * var(--unit)) solid transparent;
     border-left: calc(4.5 * var(--unit)) solid white;
 }
-#start-game[disabled=true] {
-    background-color: lightgray;
+#start-game.disabled {
+    background-color: #c0c0c0;
 }
-
-#guesses {
-    margin: calc(4 * var(--unit));
+#start-game.disabled > #play {
+    background-color: #b4b4b4;
 }
 
 .guess {
-    margin-top: calc(3 * var(--unit));
     display: flex;
     flex-direction: row;
-    justify-content: space-between;
     align-items: center;
 }
-.guessed-word {
-    width: calc(30 * var(--unit));
-    font-size: calc(4 * var(--unit));
+.score-button {
+    font-size: calc(3.5 * var(--unit));
+    padding: calc(1 * var(--unit)) calc(1.4 * var(--unit));
 }
-.send-result {
-    width: calc(12 * var(--unit));
-    font-size: calc(4 * var(--unit));
+.guess.active > .score-button {
     cursor: pointer;
-    text-align: right;
 }
+.score-button[score="0"] {margin-left: auto;}
+.score-button[score="correct"] {
+    margin-left: calc(4 * var(--unit));
+    padding: calc(2 * var(--unit));
+    width: calc(4 * var(--unit));
+    height: calc(4 * var(--unit));
+    border-radius: 50%;
+}
+.score-button[score="0"] {background-color: #ff8c00;}
+.score-button[score="1"] {background-color: #ff9f00;}
+.score-button[score="2"] {background-color: #ffb200;}
+.score-button[score="3"] {background-color: #ffc500;}
+.score-button[score="4"] {background-color: #ffd800;}
+.score-button[score="5"] {background-color: #ffeb00;}
+.score-button[score="6"] {background-color: #ffff00;}
+.score-button[score="7"] {background-color: #deff00;}
+.score-button[score="8"] {background-color: #bdfe00;}
+.score-button[score="9"] {background-color: #9cfd00;}
+.score-button[score="correct"] {background-color: #7cfc00;}
+.guess:not(.active) > .score-button:not(.selected) {background-color: white; color: lightgray}
 
 .loading {
     width: calc(5 * var(--unit));

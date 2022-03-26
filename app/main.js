@@ -1,25 +1,9 @@
 "use strict";
 
-let game_is_active = false;
 let previous_guesses = [];
 
-const WORDS = new Set([
-    'shallowest', 'newts', 'crippled', 'Amadeus',
-    'sclerosis', 'dory', 'stink', 'prepares',
-    'oration', 'abbess', 'philters', 'detainment',
-    'shakedown', 'thriftily', 'abrogate'
-]);
-
-function set_button_states() {
-    const valid_word = WORDS.has(document.getElementById('chosen-word').value);
-    document.getElementById('start-game').setAttribute('disabled', game_is_active || !valid_word);
-}
-
 function start_game() {
-    game_is_active = true;
-    previous_guesses = [];
-    document.getElementById('start-game').setAttribute('disabled', true);
-    document.getElementById('chosen-word').readOnly = true;
+    document.getElementById('start-game').classList.add('disabled');
     ask_computer_to_make_a_guess();
 }
 
@@ -43,31 +27,13 @@ async function ask_computer_to_make_a_guess() {
             body: JSON.stringify(previous_guesses)
         });
         const result = await response.json();
-        if (result.guess === document.getElementById('chosen-word').value) {
-            new_guess.innerHTML = `
-                <div class="guessed-word">${result.guess}</div>
-                <div>Computer won after ${previous_guesses.length + 1} guesses</div>
-            `;
-        } else {
-            new_guess.innerHTML = `
-                <div class="guessed-word">${result.guess}</div>
-                <input type="range" min="0" max="10" value="0">
-                <div class="send-result"></div>
-            `;
-            new_guess.querySelector('input').addEventListener('input', function(event) {
-                new_guess.querySelector('.send-result').innerText = event.target.value + ' 📨';
-            });
-            new_guess.querySelector('.send-result').addEventListener('click', function(event) {
-                const score = parseInt(event.target.innerText.split(' ')[0]);
-                if (!Number.isNaN(score)) {
-                    new_guess.querySelector('input').disabled = true;
-                    previous_guesses.push({guess: result.guess, score});
-                    ask_computer_to_make_a_guess();
-                }
-            });
-        }
+        new_guess.innerText = result.guess;
+        new_guess.setAttribute('guess', result.guess);
+        create_result_buttons(new_guess);
+        new_guess.classList.add('active');
     } catch {
-        new_guess.innerText = 'ERROR';
+        new_guess.innerText = 'ERROR, click to retry';
+        new_guess.style.cursor = 'pointer';
         new_guess.addEventListener('click', function() {
             document.getElementById('guesses').removeChild(new_guess);
             ask_computer_to_make_a_guess();
@@ -75,18 +41,53 @@ async function ask_computer_to_make_a_guess() {
     }
 }
 
-document.addEventListener('DOMContentLoaded', function () {
-    for (const word of WORDS) {
-        const option = document.createElement('option');
-        option.setAttribute('value', word);
-        document.getElementById('all-words').appendChild(option);
+function create_result_buttons(guess_elt) {
+    for (let i = 0; i <= 10; i++) {
+        const button = document.createElement('div');
+        button.classList.add('score-button');
+        button.setAttribute('score', i === 10 ? 'correct' : i);
+        button.innerText = i === 10 ? '✔️' : i;
+        button.addEventListener('click', send_result);
+        guess_elt.appendChild(button);
     }
-    set_button_states();
-    document.getElementById('chosen-word').addEventListener('input', set_button_states);
-    document.getElementById('chosen-word').addEventListener('keyup', function(event) {
-        if (event.key === "Enter")
-            if (document.getElementById('start-game').getAttribute('disabled') === 'false')
-                start_game();
-    });
+}
+
+function send_result(event) {
+    const guess_elt = event.target.parentElement;
+
+    if (!guess_elt.classList.contains('active'))
+        return;
+    guess_elt.classList.remove('active');
+
+    event.target.classList.add('selected');
+
+    const score = event.target.getAttribute('score');
+    previous_guesses.push({guess: guess_elt.getAttribute('guess'), score});
+
+    if (score === 'correct') {
+        // TODO: win animation?
+    } else {
+        ask_computer_to_make_a_guess();
+    }
+}
+
+document.addEventListener('DOMContentLoaded', function () {
     document.getElementById('start-game').addEventListener('click', start_game);
+    document.body.addEventListener('keyup', function(event) {
+        if (event.key === 'Enter' && !document.getElementById('start-game').classList.contains('disabled'))
+            start_game();
+
+        const guesses = document.getElementsByClassName('guess');
+        if (guesses.length === 0)
+            return;
+
+        const guess_elt = guesses[0];
+        if (!guess_elt.classList.contains('active'))
+            return;
+
+        const score = 'vVwW'.includes(event.key) ? 'correct' : event.key;
+        for (let elt = guess_elt.firstElementChild; elt; elt = elt.nextElementSibling)
+            if (elt.getAttribute('score') === score)
+                send_result({target: elt});
+    });
 });
