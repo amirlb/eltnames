@@ -1,5 +1,22 @@
 "use strict";
 
+// A word game inspired by Semantle
+// Copyright (C) 2022  Amir Livne Bar-on and Yaron Racah
+
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU Affero General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU Affero General Public License for more details.
+
+// You should have received a copy of the GNU Affero General Public License
+// along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+
 let previous_guesses = [];
 
 function start_game() {
@@ -93,6 +110,9 @@ function send_result(event) {
 document.addEventListener('DOMContentLoaded', function () {
     document.getElementById('start-game').addEventListener('click', start_game);
     document.body.addEventListener('keyup', function(event) {
+        if (event.ctrlKey || event.altKey || event.metaKey)
+            return;
+
         if (event.key === 'Enter')
             start_game();
 
@@ -104,7 +124,7 @@ document.addEventListener('DOMContentLoaded', function () {
         if (!guess_elt.classList.contains('active'))
             return;
 
-        const score = 'vVwW'.includes(event.key) && !event.ctrlKey ? 'correct' : event.key;
+        const score = 'vVwW'.includes(event.key) ? 'correct' : event.key;
         for (let elt = guess_elt.firstElementChild; elt; elt = elt.nextElementSibling)
             if (elt.getAttribute('score') === score)
                 send_result({target: elt});
