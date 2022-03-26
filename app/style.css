@@ -16,25 +16,21 @@ html {
 
 body {
     height: 100%;
-    margin: 0;
+    margin: calc(2 * var(--unit));
     font-family: Montserrat, Arial, sans-serif;
+    font-size: calc(4 * var(--unit));
 }
 
 #header {
-    width: calc(95 * var(--unit));
     padding: calc(1 * var(--unit));
-    margin-left: auto;
-    margin-right: auto;
     border-bottom: 1px solid lightgray;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-}
-#app-name {
+    text-align: center;
     font-size: calc(9 * var(--unit));
     color: #222;
-    margin-left: auto;
-    margin-right: auto;
+}
+
+#explanation {
+    margin-top: calc(3 * var(--unit));
 }
 
 #setup {
@@ -42,7 +38,7 @@ body {
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
-    margin: calc(6 * var(--unit)) calc(3 * var(--unit));
+    margin: calc(4 * var(--unit)) calc(3 * var(--unit));
 }
 #word-choice {
     font-size: calc(4 * var(--unit));

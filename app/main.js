@@ -75,18 +75,6 @@ async function ask_computer_to_make_a_guess() {
     }
 }
 
-let previous_adapt_ts = null;
-function adapt_to_window_size() {
-    window.requestAnimationFrame(function (ts) {
-        if (ts === previous_adapt_ts)
-            return;
-
-        const unit = Math.min(0.01 * window.innerWidth, 0.006 * window.innerHeight);
-        document.documentElement.style.setProperty('--unit', `${unit}px`);
-        previous_adapt_ts = ts;
-    });
-}
-
 document.addEventListener('DOMContentLoaded', function () {
     for (const word of WORDS) {
         const option = document.createElement('option');
@@ -101,6 +89,4 @@ document.addEventListener('DOMContentLoaded', function () {
                 start_game();
     });
     document.getElementById('start-game').addEventListener('click', start_game);
-    adapt_to_window_size();
-    window.addEventListener('resize', adapt_to_window_size);
 });
