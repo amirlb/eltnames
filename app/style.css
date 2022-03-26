@@ -41,7 +41,6 @@ body {
     width: calc(50 * var(--unit));
     height: calc(12 * var(--unit));
     border-radius: calc(6 * var(--unit));
-    cursor: pointer;
     background-color: #2090ff;
     transition: 500ms;
     margin-top: calc(1 * var(--unit));
@@ -54,6 +53,9 @@ body {
     color: white;
     display: flex;
     align-items: center;
+}
+#start-game:not(.disabled) {
+    cursor: pointer;
 }
 #play {
     margin-left: auto;
@@ -87,7 +89,6 @@ body {
     align-items: center;
 }
 .score-button {
-    font-size: calc(3.5 * var(--unit));
     padding: calc(1 * var(--unit)) calc(1.4 * var(--unit));
     transition: 500ms;
 }

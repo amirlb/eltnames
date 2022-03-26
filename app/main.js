@@ -4,6 +4,8 @@ let previous_guesses = [];
 
 function start_game() {
     document.getElementById('start-game').classList.add('disabled');
+    previous_guesses = [];
+    document.getElementById('guesses').innerText = '';
     ask_computer_to_make_a_guess();
 }
 
@@ -65,7 +67,15 @@ function send_result(event) {
     previous_guesses.push({guess: guess_elt.getAttribute('guess'), score});
 
     if (score === 'correct') {
-        // TODO: win animation?
+        window.setTimeout(function() {
+            const win_statement = document.createElement('div');
+            win_statement.innerText = `
+                Computer found the correct word after ${previous_guesses.length} guesses.
+            `;
+            guesses.prepend(win_statement);
+            win_statement.style.marginBottom = 'calc(5 * var(--unit))';
+            document.getElementById('start-game').classList.remove('disabled');
+        }, 1000);
     } else {
         window.setTimeout(ask_computer_to_make_a_guess, 500);
     }
