@@ -16,7 +16,7 @@ html {
 
 body {
     height: 100%;
-    margin: calc(2 * var(--unit));
+    margin: 0;
     font-family: Montserrat, Arial, sans-serif;
     font-size: calc(4 * var(--unit));
 }
@@ -31,7 +31,7 @@ body {
 
 #explanation {
     margin-top: calc(3 * var(--unit));
-    padding: 0 calc(2 * var(--unit));
+    padding: 0 calc(4 * var(--unit));
 }
 #explanation > p:last-child {
     margin-bottom: 0;
@@ -87,6 +87,9 @@ body {
     display: flex;
     flex-direction: row;
     align-items: center;
+}
+.guessed-word {
+    cursor: pointer;
 }
 .score-button {
     padding: calc(1 * var(--unit)) calc(1.4 * var(--unit));

@@ -3,6 +3,8 @@
 let previous_guesses = [];
 
 function start_game() {
+    if (document.getElementById('start-game').classList.contains('disabled'))
+        return;
     document.getElementById('start-game').classList.add('disabled');
     previous_guesses = [];
     document.getElementById('guesses').innerText = '';
@@ -29,7 +31,14 @@ async function ask_computer_to_make_a_guess() {
             body: JSON.stringify(previous_guesses)
         });
         const result = await response.json();
-        new_guess.innerText = result.guess;
+        const word_elt = document.createElement('div');
+        word_elt.innerText = `📖 ${result.guess}`;
+        word_elt.classList.add('guessed-word');
+        word_elt.addEventListener('click', function() {
+            window.open(`https://www.merriam-webster.com/dictionary/${result.guess}`, '_blank');
+        });
+        new_guess.innerText = '';
+        new_guess.appendChild(word_elt);
         new_guess.setAttribute('guess', result.guess);
         create_result_buttons(new_guess);
         new_guess.classList.add('active');
@@ -84,7 +93,7 @@ function send_result(event) {
 document.addEventListener('DOMContentLoaded', function () {
     document.getElementById('start-game').addEventListener('click', start_game);
     document.body.addEventListener('keyup', function(event) {
-        if (event.key === 'Enter' && !document.getElementById('start-game').classList.contains('disabled'))
+        if (event.key === 'Enter')
             start_game();
 
         const guesses = document.getElementsByClassName('guess');
@@ -95,7 +104,7 @@ document.addEventListener('DOMContentLoaded', function () {
         if (!guess_elt.classList.contains('active'))
             return;
 
-        const score = 'vVwW'.includes(event.key) ? 'correct' : event.key;
+        const score = 'vVwW'.includes(event.key) && !event.ctrlKey ? 'correct' : event.key;
         for (let elt = guess_elt.firstElementChild; elt; elt = elt.nextElementSibling)
             if (elt.getAttribute('score') === score)
                 send_result({target: elt});
