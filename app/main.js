@@ -67,7 +67,7 @@ function send_result(event) {
     if (score === 'correct') {
         // TODO: win animation?
     } else {
-        ask_computer_to_make_a_guess();
+        window.setTimeout(ask_computer_to_make_a_guess, 500);
     }
 }
 

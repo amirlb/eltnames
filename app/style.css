@@ -33,6 +33,9 @@ body {
     margin-top: calc(3 * var(--unit));
     padding: 0 calc(2 * var(--unit));
 }
+#explanation > p:last-child {
+    margin-bottom: 0;
+}
 
 #start-game {
     width: calc(50 * var(--unit));
@@ -41,7 +44,10 @@ body {
     cursor: pointer;
     background-color: #2090ff;
     transition: 500ms;
-    margin: calc(8 * var(--unit)) auto;
+    margin-top: calc(1 * var(--unit));
+    margin-bottom: calc(8 * var(--unit));
+    margin-left: auto;
+    margin-right: auto;
     padding-left: calc(10 * var(--unit));
     font-size: calc(5 * var(--unit));
     font-weight: 500;
@@ -83,6 +89,7 @@ body {
 .score-button {
     font-size: calc(3.5 * var(--unit));
     padding: calc(1 * var(--unit)) calc(1.4 * var(--unit));
+    transition: 500ms;
 }
 .guess.active > .score-button {
     cursor: pointer;
@@ -107,6 +114,7 @@ body {
 .score-button[score="9"] {background-color: #9cfd00;}
 .score-button[score="correct"] {background-color: #7cfc00;}
 .guess:not(.active) > .score-button:not(.selected) {background-color: white; color: lightgray}
+.guess:not(.active) > .score-button[score="correct"]:not(.selected) {opacity: 0;}
 
 .loading {
     width: calc(5 * var(--unit));
