@@ -33,7 +33,7 @@ html {
 
 body {
     height: 100%;
-    margin: 0;
+    margin: calc(2 * var(--unit));
     font-family: Montserrat, Arial, sans-serif;
     font-size: calc(4 * var(--unit));
 }
@@ -48,7 +48,7 @@ body {
 
 #explanation {
     margin-top: calc(3 * var(--unit));
-    padding: 0 calc(4 * var(--unit));
+    padding: 0 calc(2 * var(--unit));
 }
 #explanation > p:last-child {
     margin-bottom: 0;
@@ -70,6 +70,7 @@ body {
     color: white;
     display: flex;
     align-items: center;
+    user-select: none;
 }
 #start-game:not(.disabled) {
     cursor: pointer;
@@ -100,47 +101,65 @@ body {
     background-color: #b4b4b4;
 }
 
-.guess {
+.guess:first-child {
+    height: calc(15 * var(--unit));
+}
+.guessed-word {
+    display: flex;
+    flex-direction: row;
+}
+.guessed-word > span {
+    margin: 0 auto;
+}
+.dictionary-link {
+    text-decoration: none;
+}
+.score-button {
+    margin: calc(1 * var(--unit)) 0;
+    width: calc(8 * var(--unit));
+    height: calc(6 * var(--unit));
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    transition: 500ms;
+}
+.guess:first-child .score-button {
+    cursor: pointer;
+    user-select: none;
+}
+.guess:not(:first-child) .score-button {
+    margin-left: 0;
+    margin-top: 0;
+    margin-right: calc(3 * var(--unit));
+    margin-bottom: calc(1 * var(--unit));
+}
+.score-button[score="correct"] {
+    height: calc(8 * var(--unit));
+    margin-left: auto;
+    border-radius: 50%;
+}
+.score-button[score="0"] {background-color: #ff2910;}
+.score-button[score="1"] {background-color: #fd530c;}
+.score-button[score="2"] {background-color: #fb7e09;}
+.score-button[score="3"] {background-color: #faa906;}
+.score-button[score="4"] {background-color: #f8d403;}
+.score-button[score="5"] {background-color: #f7ff00;}
+.score-button[score="6"] {background-color: #c5f706;}
+.score-button[score="7"] {background-color: #94ef0c;}
+.score-button[score="8"] {background-color: #62e712;}
+.score-button[score="9"] {background-color: #31df18;}
+.score-button[score="correct"] {background-color: #00d71e;}
+.score-button.fading:not(.selected) {opacity: 0;}
+
+#correct-word {
+    font-weight: bold;
+}
+
+.single-line {
     display: flex;
     flex-direction: row;
     align-items: center;
 }
-.guessed-word {
-    cursor: pointer;
-}
-.score-button {
-    padding: calc(1 * var(--unit)) calc(1.4 * var(--unit));
-    width: calc(2 * var(--unit));
-    font-size: calc(3.5 * var(--unit));
-    text-align: center;
-    user-select: none;
-    transition: 500ms;
-}
-.guess.active > .score-button {
-    cursor: pointer;
-}
-.score-button[score="0"] {margin-left: auto;}
-.score-button[score="correct"] {
-    margin-left: calc(3 * var(--unit));
-    padding: calc(2 * var(--unit));
-    width: calc(4 * var(--unit));
-    height: calc(4 * var(--unit));
-    border-radius: 50%;
-}
-.score-button[score="0"] {background-color: #ff8c00;}
-.score-button[score="1"] {background-color: #ff9f00;}
-.score-button[score="2"] {background-color: #ffb200;}
-.score-button[score="3"] {background-color: #ffc500;}
-.score-button[score="4"] {background-color: #ffd800;}
-.score-button[score="5"] {background-color: #ffeb00;}
-.score-button[score="6"] {background-color: #ffff00;}
-.score-button[score="7"] {background-color: #deff00;}
-.score-button[score="8"] {background-color: #bdfe00;}
-.score-button[score="9"] {background-color: #9cfd00;}
-.score-button[score="correct"] {background-color: #7cfc00;}
-.guess:not(.active) > .score-button:not(.selected) {background-color: white; color: lightgray}
-.guess:not(.active) > .score-button[score="correct"]:not(.selected) {opacity: 0;}
-
 .loading {
     width: calc(5 * var(--unit));
     height: calc(5 * var(--unit));

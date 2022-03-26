@@ -29,16 +29,7 @@ function start_game() {
 }
 
 async function ask_computer_to_make_a_guess() {
-    const new_guess = document.createElement('div');
-    new_guess.classList.add('guess');
-    new_guess.innerHTML = `
-        <svg viewBox="0 0 100 100" class="loading">
-            <circle cx="20" cy="50" r="15" fill="black" />
-            <circle cx="65" cy="76" r="15" fill="black" />
-            <circle cx="65" cy="24" r="15" fill="black" />
-        </svg>
-        <span class="loading-text">Computer is thinking</span>  
-    `;
+    const new_guess = create_loading_guess_div();
     document.getElementById('guesses').prepend(new_guess);
 
     try {
@@ -48,62 +39,90 @@ async function ask_computer_to_make_a_guess() {
             body: JSON.stringify(previous_guesses)
         });
         const result = await response.json();
-        const word_elt = document.createElement('div');
-        word_elt.innerText = `📖 ${result.guess}`;
-        word_elt.classList.add('guessed-word');
-        word_elt.addEventListener('click', function() {
-            window.open(`https://www.merriam-webster.com/dictionary/${result.guess}`, '_blank');
-        });
-        new_guess.innerText = '';
-        new_guess.appendChild(word_elt);
-        new_guess.setAttribute('guess', result.guess);
-        create_result_buttons(new_guess);
-        new_guess.classList.add('active');
+        set_guess_div(new_guess, result.guess);
     } catch {
-        new_guess.innerText = 'ERROR, click to retry';
-        new_guess.style.cursor = 'pointer';
-        new_guess.addEventListener('click', function() {
-            document.getElementById('guesses').removeChild(new_guess);
-            ask_computer_to_make_a_guess();
-        });
+        set_guess_div_to_error(new_guess);
     }
 }
 
-function create_result_buttons(guess_elt) {
+function create_loading_guess_div() {
+    const guess_div = document.createElement('div');
+    guess_div.classList.add('guess');
+    guess_div.innerHTML = `
+        <svg viewBox="0 0 100 100" class="loading">
+            <circle cx="20" cy="50" r="15" fill="black" />
+            <circle cx="65" cy="76" r="15" fill="black" />
+            <circle cx="65" cy="24" r="15" fill="black" />
+        </svg>
+        <span class="loading-text">Computer is thinking</span>
+    `;
+    guess_div.classList.add('single-line');
+    return guess_div;
+}
+
+function set_guess_div_to_error(guess_div) {
+    guess_div.innerText = 'ERROR, click to retry';
+    guess_div.style.cursor = 'pointer';
+    guess_div.addEventListener('click', function() {
+        document.getElementById('guesses').removeChild(guess_div);
+        ask_computer_to_make_a_guess();
+    });
+}
+
+function set_guess_div(guess_div, guess) {
+    guess_div.innerHTML = `
+        <div class="guessed-word">
+            <span>${guess}</span>
+            <a class="dictionary-link"
+               target="_blank"
+               href="https://www.merriam-webster.com/dictionary/${guess}"
+            >(go to dictionary)</a>
+        </div>
+        <div class="single-line"></div>
+    `;
+    guess_div.classList.remove('single-line');
+    guess_div.setAttribute('guess', guess);
+
+    const buttons_div = guess_div.querySelector('.single-line');
     for (let i = 0; i <= 10; i++) {
         const button = document.createElement('div');
         button.classList.add('score-button');
         button.setAttribute('score', i === 10 ? 'correct' : i);
         button.innerText = i === 10 ? '✔️' : i;
-        button.addEventListener('click', send_result);
-        guess_elt.appendChild(button);
+        button.addEventListener('click', on_score_guess);
+        buttons_div.appendChild(button);
     }
 }
 
-function send_result(event) {
-    const guess_elt = event.target.parentElement;
-
-    if (!guess_elt.classList.contains('active'))
-        return;
-    guess_elt.classList.remove('active');
+function on_score_guess(event) {
+    const guess_div = event.target.parentElement.parentElement;
 
     event.target.classList.add('selected');
+    for (const score_button of document.querySelectorAll('.guess:first-child .score-button'))
+        score_button.classList.add('fading');
 
+    const guess = guess_div.getAttribute('guess');
     const score = event.target.getAttribute('score');
-    previous_guesses.push({guess: guess_elt.getAttribute('guess'), score});
+    previous_guesses.push({guess, score});
 
     if (score === 'correct') {
         window.setTimeout(function() {
-            const win_statement = document.createElement('div');
-            win_statement.innerText = `
-                Computer found the correct word after ${previous_guesses.length} guesses.
+            guess_div.innerHTML = `
+                Computer found the correct word
+                <span id="correct-word">${guess}</span>
+                after ${previous_guesses.length} guesses.
             `;
-            guesses.prepend(win_statement);
-            win_statement.style.marginBottom = 'calc(5 * var(--unit))';
+            guess_div.classList.add('correct');
             document.getElementById('start-game').classList.remove('disabled');
         }, 1000);
     } else {
-        window.setTimeout(ask_computer_to_make_a_guess, 500);
+        window.setTimeout(function() {
+            guess_div.innerHTML = `
+                <div class="score-button" score="${score}">${score}</div>
+                ${guess}
+            `;
+            ask_computer_to_make_a_guess();
+        }, 500);
     }
 }
 
@@ -120,13 +139,9 @@ document.addEventListener('DOMContentLoaded', function () {
         if (guesses.length === 0)
             return;
 
-        const guess_elt = guesses[0];
-        if (!guess_elt.classList.contains('active'))
-            return;
-
         const score = 'vVwW'.includes(event.key) ? 'correct' : event.key;
-        for (let elt = guess_elt.firstElementChild; elt; elt = elt.nextElementSibling)
-            if (elt.getAttribute('score') === score)
-                send_result({target: elt});
+        for (const score_button of document.querySelectorAll('.guess:first-child .score-button'))
+            if (score_button.getAttribute('score') === score)
+                on_score_guess({target: score_button});
     });
 });
