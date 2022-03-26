@@ -20,6 +20,7 @@
 import json
 import os
 import numpy as np
+import pymysql
 
 
 def make_guess(previous_results):
@@ -27,6 +28,9 @@ def make_guess(previous_results):
     vectors = np.load('eltnames_vectors.npy')
     log_likelihoods = np.zeros(len(words))
     for record in previous_results:
+        if record['score'] == 'correct':
+            return record['guess']
+
         try:
             guess_index = words.index(record['guess'])
         except ValueError:
@@ -43,6 +47,26 @@ def make_guess(previous_results):
             return guess
 
 
+def get_client_id(cookie):
+    if not cookie:
+        return ''
+    for x in cookie.split('; '):
+        if x.startswith('_ga='):
+            return x[4:]
+    return ''
+
+
+def record_query(data):
+    with open('eltnames_credentials.json') as credentials_file:
+        credentials = json.load(credentials_file)
+        db = pymysql.connect(**credentials)
+        with db.cursor() as cursor:
+            query = 'INSERT INTO queries (user_ip_addr, user_lang, user_ga_id, query) VALUES (%s, %s, %s, %s)'
+            values = (os.getenv('REMOTE_ADDR'), os.getenv('LANG'), get_client_id(os.getenv('HTTP_COOKIE')), json.dumps(data))
+            cursor.execute(query, values)
+        db.commit()
+
+
 if os.getenv('REQUEST_METHOD').lower() == 'options':
     print('Access-Control-Allow-Origin: *')
     print('Access-Control-Allow-Headers: *')
@@ -55,3 +79,4 @@ else:
     print('Content-Type: application/json')
     print()
     print(json.dumps({'guess': guess}))
+    record_query(previous_results)

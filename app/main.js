@@ -115,6 +115,13 @@ function on_score_guess(event) {
             guess_div.classList.add('correct');
             document.getElementById('start-game').classList.remove('disabled');
         }, 1000);
+
+        // Notify the server what the correct word was
+        fetch('https://meduyeket.net/eltnames.cgi', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify(previous_guesses)
+        });
     } else {
         window.setTimeout(function() {
             guess_div.innerHTML = `
