@@ -163,6 +163,7 @@ body {
 .loading {
     width: calc(5 * var(--unit));
     height: calc(5 * var(--unit));
+    margin-left: calc(5 * var(--unit));
     margin-right: calc(3 * var(--unit));
     animation: rotate linear 700ms infinite;
 }
