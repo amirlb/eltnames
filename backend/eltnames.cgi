@@ -36,7 +36,7 @@ def make_guess(previous_results):
         except ValueError:
             continue
         scalar_products = (vectors * vectors[guess_index]).sum(axis=1)
-        score = float(record['score']) * 0.1 - 0.2
+        score = float(record['score']) * 0.075
         log_likelihoods -= (scalar_products - score) ** 2
     probs = np.exp((log_likelihoods - np.mean(log_likelihoods)) * 20)
     probs /= np.sum(probs)
